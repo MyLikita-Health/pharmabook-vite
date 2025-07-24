@@ -1,0 +1,7 @@
+.side-bar{
+   position: fixed;
+    width: 25vw;
+    overflow-y: scroll;
+    top: 15vh;
+    bottom: 0;
+}
