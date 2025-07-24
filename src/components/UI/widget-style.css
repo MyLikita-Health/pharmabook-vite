@@ -197,8 +197,31 @@
   }
 }
 
+@keyframes pulse {
+  0%, 100% {
+    transform: scale(1);
+  }
+  50% {
+    transform: scale(1.02);
+  }
+}
+
+@keyframes float {
+  0%, 100% {
+    transform: translateY(0px);
+  }
+  50% {
+    transform: translateY(-5px);
+  }
+}
+
 .widget-card {
   animation: fadeInUp 0.6s ease-out;
+  will-change: transform;
+}
+
+.widget-card:hover {
+  animation: float 2s ease-in-out infinite;
 }
 
 .widget-card:nth-child(1) {
@@ -212,6 +235,23 @@
 }
 .widget-card:nth-child(4) {
   animation-delay: 0.4s;
+}
+.widget-card:nth-child(5) {
+  animation-delay: 0.5s;
+}
+.widget-card:nth-child(6) {
+  animation-delay: 0.6s;
+}
+
+/* Enhanced hover effects */
+.widget-card:hover .widget-value {
+  animation: pulse 1.5s ease-in-out infinite;
+}
+
+/* Better focus states */
+.widget-card:focus-within {
+  outline: 2px solid #3b82f6;
+  outline-offset: 2px;
 }
 
 /* Loading State */
