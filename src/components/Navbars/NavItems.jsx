@@ -67,4 +67,7 @@ const NavItems = ({ mobile = false }) => {
   );
 };
 
+// Export routes for use in other components like NewUser
+export const routes = navItems;
+
 export default NavItems;
