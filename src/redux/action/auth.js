@@ -34,6 +34,7 @@ export function createUser(data = [], success = (f) => f, error = (f) => f) {
 
 export function login({ username, password }, cb = (f) => f, error = (f) => f) {
   return async (dispatch) => {
+    console.log('hi')
     fetch(`${apiURL}/${endpoint}/v1/users/login`, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
