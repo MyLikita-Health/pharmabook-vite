@@ -50,7 +50,7 @@ class DemoNavbar extends React.Component {
             <>
                 <header className="header-global">
                     <Navbar
-                        className="navbar-main navbar-transparent navbar-light headroom"
+                        className="navbar-main navbar-modern bg-gradient-to-r from-blue-600 to-indigo-600 shadow-lg"
                         expand="lg"
                         id="navbar-main"
                     >
@@ -189,12 +189,12 @@ class DemoNavbar extends React.Component {
                                 >
                                     <NavItem>
                                         <NavLink
-                                            className="nav-link-icon"
+                                            className="nav-link-icon p-2 rounded-lg hover:bg-white/10 transition-colors text-white"
                                             href="https://www.facebook.com/noortakaful"
                                             id="tooltip333589074"
                                             target="_blank"
                                         >
-                                            <i className="fa fa-facebook-square" />
+                                            <i className="fa fa-facebook-square text-lg" />
                                             <span className="nav-link-inner--text d-lg-none ml-2">
                                                 Facebook
                                             </span>

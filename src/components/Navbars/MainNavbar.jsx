@@ -1,3 +1,4 @@
+
 "use client"
 
 import { useCallback, useEffect, useState } from "react"
@@ -30,7 +31,6 @@ const MainNavbar = () => {
   const location = useLocation()
   const dispatch = useDispatch()
   const [isOpen, setIsOpen] = useState(false)
-  const [showNotifications, setShowNotifications] = useState(false)
 
   const _logout = () => dispatch(logout(gotoLogin()))
   const gotoLogin = () => navigate("/app/login")
@@ -39,130 +39,195 @@ const MainNavbar = () => {
   const { user } = useSelector((state) => state.auth)
   const { topFive } = useSelector((state) => state.pharmacy)
 
-  const getPageTitle = () => {
-    const path = location.pathname
-    if (path.includes("dashboard")) return "Dashboard"
-    if (path.includes("inventory")) return "Inventory"
-    if (path.includes("sales")) return "Sales"
-    if (path.includes("reports")) return "Reports"
-    return "Pharmacy Management"
-  }
-
   return (
     <div className="navbar-wrapper">
       <AlertNews />
-      <Navbar className="main-navbar" expand="lg" fixed="top" style={{ top: topFive.length > 0 ? "40px" : "0" }}>
-        <Container fluid className="d-flex align-items-center justify-content-between">
-          {/* Brand Section */}
-          <NavbarBrand className="navbar-brand-custom mr-4" to="/app/pharmacy/dashboard" tag={Link}>
-            <div className="brand-container">
-              <img alt="Pharmacy Logo" src={logo || "/placeholder.svg"} height="45" className="brand-logo" />
-              <div className="brand-text">
-                <span className="brand-title">PharmaBooks</span>
-                <span className="brand-subtitle">Management System</span>
+      <Navbar 
+        className="modern-navbar shadow-lg" 
+        expand="lg" 
+        fixed="top" 
+        style={{ top: topFive.length > 0 ? "56px" : "0" }}
+      >
+        <Container fluid className="px-4">
+          <div className="flex items-center justify-between w-full">
+            {/* Brand Section */}
+            <NavbarBrand 
+              className="navbar-brand-modern" 
+              to="/app/pharmacy/dashboard" 
+              tag={Link}
+            >
+              <div className="flex items-center space-x-3">
+                <div className="brand-logo-container">
+                  <img 
+                    alt="Pharmacy Logo" 
+                    src={logo || "/placeholder.svg"} 
+                    className="h-10 w-auto transition-transform hover:scale-105" 
+                  />
+                </div>
+                <div className="brand-text-container hidden md:block">
+                  <h1 className="text-xl font-bold text-white mb-0">PharmaBooks</h1>
+                  <p className="text-sm text-blue-100 mb-0">Management System</p>
+                </div>
               </div>
-            </div>
-          </NavbarBrand>
+            </NavbarBrand>
 
-          <NavbarToggler onClick={toggle} className="custom-toggler">
-            <span className="navbar-toggler-icon">
-              <i className={`fas ${isOpen ? "fa-times" : "fa-bars"}`}></i>
-            </span>
-          </NavbarToggler>
-
-          <Collapse isOpen={isOpen} navbar className="navbar-collapse-custom">
-            {/* Navigation Items */}
-            <Nav className="navbar-nav-custom" navbar>
+            {/* Desktop Navigation */}
+            <div className="hidden lg:flex items-center space-x-8">
               <NavItems />
-            </Nav>
+            </div>
 
             {/* Right Side Actions */}
-            <Nav className="navbar-actions ml-auto" navbar>
+            <div className="flex items-center space-x-4">
+              {/* Search Bar - Desktop Only */}
+              <div className="hidden md:flex items-center bg-white/10 backdrop-blur-sm rounded-lg px-3 py-2 max-w-xs">
+                <i className="fas fa-search text-white/70 mr-2"></i>
+                <input 
+                  type="text" 
+                  placeholder="Search..." 
+                  className="bg-transparent border-0 text-white placeholder-white/70 text-sm focus:outline-none w-full"
+                />
+              </div>
+
               {/* Notifications */}
-              <UncontrolledDropdown nav inNavbar className="notification-dropdown">
-                <DropdownToggle nav caret={false} className="notification-toggle">
-                  <i className="fas fa-bell"></i>
-                  {topFive.length > 0 && (
-                    <Badge color="danger" className="notification-badge">
-                      {topFive.length}
-                    </Badge>
-                  )}
-                </DropdownToggle>
-                <DropdownMenu right className="notification-menu">
-                  <DropdownItem header className="notification-header">
-                    <i className="fas fa-bell mr-2"></i>
-                    Notifications ({topFive.length})
-                  </DropdownItem>
-                  <div className="notification-list">
-                    {topFive.slice(0, 5).map((item, index) => (
-                      <DropdownItem key={index} className="notification-item">
-                        <div className="notification-content">
-                          <div className="notification-icon">
-                            <i className="fas fa-exclamation-triangle text-warning"></i>
-                          </div>
-                          <div className="notification-text">
-                            <strong>{item.drug_name}</strong>
-                            <br />
-                            <small className="text-muted">
-                              Expires in {moment(item.expiry_date).diff(today, "days")} days
-                            </small>
-                          </div>
-                        </div>
-                      </DropdownItem>
-                    ))}
+              <UncontrolledDropdown nav inNavbar className="relative">
+                <DropdownToggle nav caret={false} className="notification-button">
+                  <div className="relative p-2 rounded-lg bg-white/10 hover:bg-white/20 transition-colors">
+                    <i className="fas fa-bell text-white text-lg"></i>
+                    {topFive.length > 0 && (
+                      <Badge 
+                        color="danger" 
+                        className="absolute -top-1 -right-1 h-5 w-5 flex items-center justify-center text-xs font-bold rounded-full"
+                      >
+                        {topFive.length}
+                      </Badge>
+                    )}
                   </div>
-                  <DropdownItem divider />
-                  <DropdownItem className="text-center">
-                    <Link to="/app/pharmacy/alerts" className="view-all-link">
+                </DropdownToggle>
+                <DropdownMenu right className="notification-dropdown-modern mt-2 w-80 max-h-96 overflow-y-auto">
+                  <div className="p-4 border-b border-gray-200 bg-gradient-to-r from-blue-50 to-indigo-50">
+                    <h6 className="flex items-center font-semibold text-gray-800 mb-0">
+                      <i className="fas fa-bell mr-2 text-blue-600"></i>
+                      Notifications ({topFive.length})
+                    </h6>
+                  </div>
+                  
+                  {topFive.length === 0 ? (
+                    <div className="p-6 text-center text-gray-500">
+                      <i className="fas fa-bell-slash text-3xl mb-3 text-gray-300"></i>
+                      <p>No notifications</p>
+                    </div>
+                  ) : (
+                    <div className="max-h-64 overflow-y-auto">
+                      {topFive.slice(0, 5).map((item, index) => (
+                        <DropdownItem key={index} className="notification-item-modern p-3 border-0">
+                          <div className="flex items-start space-x-3">
+                            <div className="flex-shrink-0">
+                              <div className="w-10 h-10 bg-orange-100 rounded-full flex items-center justify-center">
+                                <i className="fas fa-exclamation-triangle text-orange-600"></i>
+                              </div>
+                            </div>
+                            <div className="flex-1 min-w-0">
+                              <p className="font-medium text-gray-900 truncate">{item.drug_name}</p>
+                              <p className="text-sm text-gray-500">
+                                Expires in {moment(item.expiry_date).diff(today, "days")} days
+                              </p>
+                            </div>
+                          </div>
+                        </DropdownItem>
+                      ))}
+                    </div>
+                  )}
+                  
+                  <div className="p-3 border-t border-gray-200 bg-gray-50">
+                    <Link 
+                      to="/app/pharmacy/alerts" 
+                      className="block text-center text-blue-600 hover:text-blue-700 font-medium text-sm"
+                    >
                       View All Alerts
                     </Link>
-                  </DropdownItem>
+                  </div>
                 </DropdownMenu>
               </UncontrolledDropdown>
 
               {/* User Profile */}
-              <UncontrolledDropdown nav inNavbar className="user-dropdown">
-                <DropdownToggle nav caret={false} className="user-toggle">
-                  <div className="user-avatar">
-                    <img src="/placeholder.svg?height=35&width=35" alt="User Avatar" className="avatar-img" />
-                    <div className="user-info d-none d-md-block">
-                      <span className="user-name">{user?.name || "User"}</span>
-                      <span className="user-role">{user?.role || "Pharmacist"}</span>
+              <UncontrolledDropdown nav inNavbar className="relative">
+                <DropdownToggle nav caret={false} className="user-button">
+                  <div className="flex items-center space-x-3 p-2 rounded-lg bg-white/10 hover:bg-white/20 transition-colors">
+                    <img 
+                      src="/placeholder.svg?height=32&width=32" 
+                      alt="User Avatar" 
+                      className="w-8 h-8 rounded-full border-2 border-white/30"
+                    />
+                    <div className="hidden md:block text-left">
+                      <p className="text-sm font-medium text-white mb-0">{user?.name || "User"}</p>
+                      <p className="text-xs text-blue-100 mb-0">{user?.role || "Pharmacist"}</p>
                     </div>
+                    <i className="fas fa-chevron-down text-white/70 text-xs"></i>
                   </div>
                 </DropdownToggle>
-                <DropdownMenu right className="user-menu">
-                  <DropdownItem header className="user-menu-header">
-                    <div className="user-details">
-                      <img src="/placeholder.svg?height=50&width=50" alt="User Avatar" className="user-menu-avatar" />
+                <DropdownMenu right className="user-dropdown-modern mt-2 w-64">
+                  <div className="p-4 border-b border-gray-200 bg-gradient-to-r from-blue-50 to-indigo-50">
+                    <div className="flex items-center space-x-3">
+                      <img 
+                        src="/placeholder.svg?height=48&width=48" 
+                        alt="User Avatar" 
+                        className="w-12 h-12 rounded-full border-2 border-blue-200"
+                      />
                       <div>
-                        <strong>{user?.name || "User Name"}</strong>
-                        <br />
-                        <small className="text-muted">{user?.email || "user@pharmacy.com"}</small>
+                        <p className="font-semibold text-gray-900 mb-0">{user?.name || "User Name"}</p>
+                        <p className="text-sm text-gray-600 mb-0">{user?.email || "user@pharmacy.com"}</p>
                       </div>
                     </div>
-                  </DropdownItem>
-                  <DropdownItem divider />
-                  <DropdownItem>
-                    <i className="fas fa-user mr-2"></i>
-                    Profile Settings
-                  </DropdownItem>
-                  <DropdownItem>
-                    <i className="fas fa-cog mr-2"></i>
-                    Preferences
-                  </DropdownItem>
-                  <DropdownItem>
-                    <i className="fas fa-question-circle mr-2"></i>
-                    Help & Support
-                  </DropdownItem>
-                  <DropdownItem divider />
-                  <DropdownItem onClick={_logout} className="logout-item">
-                    <i className="fas fa-sign-out-alt mr-2"></i>
-                    Logout
-                  </DropdownItem>
+                  </div>
+                  
+                  <div className="py-2">
+                    <DropdownItem className="user-menu-item">
+                      <i className="fas fa-user mr-3 text-gray-400"></i>
+                      Profile Settings
+                    </DropdownItem>
+                    <DropdownItem className="user-menu-item">
+                      <i className="fas fa-cog mr-3 text-gray-400"></i>
+                      Preferences
+                    </DropdownItem>
+                    <DropdownItem className="user-menu-item">
+                      <i className="fas fa-question-circle mr-3 text-gray-400"></i>
+                      Help & Support
+                    </DropdownItem>
+                  </div>
+                  
+                  <div className="border-t border-gray-200 py-2">
+                    <DropdownItem onClick={_logout} className="user-menu-item text-red-600 hover:bg-red-50">
+                      <i className="fas fa-sign-out-alt mr-3"></i>
+                      Logout
+                    </DropdownItem>
+                  </div>
                 </DropdownMenu>
               </UncontrolledDropdown>
-            </Nav>
+
+              {/* Mobile Menu Toggle */}
+              <NavbarToggler onClick={toggle} className="lg:hidden text-white border-white/30">
+                <i className={`fas ${isOpen ? "fa-times" : "fa-bars"} text-lg`}></i>
+              </NavbarToggler>
+            </div>
+          </div>
+
+          {/* Mobile Navigation */}
+          <Collapse isOpen={isOpen} navbar className="lg:hidden">
+            <div className="mt-4 pt-4 border-t border-white/20">
+              <NavItems mobile />
+              
+              {/* Mobile Search */}
+              <div className="mt-4 mb-3">
+                <div className="flex items-center bg-white/10 backdrop-blur-sm rounded-lg px-3 py-2">
+                  <i className="fas fa-search text-white/70 mr-2"></i>
+                  <input 
+                    type="text" 
+                    placeholder="Search..." 
+                    className="bg-transparent border-0 text-white placeholder-white/70 text-sm focus:outline-none w-full"
+                  />
+                </div>
+              </div>
+            </div>
           </Collapse>
         </Container>
       </Navbar>
@@ -185,24 +250,27 @@ const AlertNews = () => {
   if (topFive.length === 0) return null
 
   return (
-    <div className="alert-banner">
-      <Marquee speed={50} gradient={false} className="alert-marquee">
-        {topFive.map((item, index) => (
-          <div key={index} className="alert-item">
-            {item.expiry_date !== "1111-11-11" && (
-              <>
-                <i className="fas fa-exclamation-triangle mr-2"></i>
-                <strong>{item.drug_name}</strong>
-                <span className="mx-2">expires in</span>
-                <Badge color="warning" className="mx-1">
-                  {moment(item.expiry_date).diff(today, "days")} days
-                </Badge>
-                <span className="mx-4">•</span>
-              </>
-            )}
-          </div>
-        ))}
-      </Marquee>
+    <div className="alert-banner-modern">
+      <div className="bg-gradient-to-r from-orange-500 to-red-500 text-white py-3 shadow-md">
+        <Marquee speed={50} gradient={false} className="flex items-center">
+          {topFive.map((item, index) => (
+            <div key={index} className="flex items-center mx-8">
+              {item.expiry_date !== "1111-11-11" && (
+                <div className="flex items-center space-x-2">
+                  <div className="flex items-center space-x-2 bg-white/20 rounded-full px-4 py-1">
+                    <i className="fas fa-exclamation-triangle text-yellow-200"></i>
+                    <span className="font-medium">{item.drug_name}</span>
+                    <span className="text-white/80">expires in</span>
+                    <Badge color="warning" className="text-orange-800 font-bold">
+                      {moment(item.expiry_date).diff(today, "days")} days
+                    </Badge>
+                  </div>
+                </div>
+              )}
+            </div>
+          ))}
+        </Marquee>
+      </div>
     </div>
   )
 }
