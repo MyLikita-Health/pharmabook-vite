@@ -1,23 +1,184 @@
-body {
-  background-color: #eeeeee;
-  font-size: 1rem !important;
-  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
-    'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
-    sans-serif;
-    /* Menlo, Monaco, Lucida Console, Liberation Mono, DejaVu Sans Mono,
-    Bitstream Vera Sans Mono, Courier New, monospace; */
+/* Main application styles - now using Tailwind */
+
+/* Custom components that extend Tailwind */
+.sidebar-modern {
+  @apply bg-white shadow-lg border-r border-gray-200 h-full;
 }
 
-/* [class*="col-"] {
-  padding-right: 2px;
-  padding-left: 2px;
-  margin-right: 5px;
-  margin-left: 5px;
-} */
+.navbar-modern {
+  @apply bg-white shadow-sm border-b border-gray-200 sticky top-0 z-50;
+}
 
-@media all and (display-mode: standalone) {
-  body {
-    background-color: '#eee';
+.content-area {
+  @apply bg-gray-50 min-h-screen p-6;
+}
+
+.dashboard-card {
+  @apply bg-white rounded-xl shadow-card p-6 border border-gray-100 hover:shadow-lg transition-shadow duration-300;
+}
+
+.dashboard-stat {
+  @apply text-center p-4;
+}
+
+.dashboard-stat-number {
+  @apply text-3xl font-bold text-gray-900 mb-2;
+}
+
+.dashboard-stat-label {
+  @apply text-sm text-gray-600 uppercase tracking-wide;
+}
+
+.page-header {
+  @apply mb-8;
+}
+
+.page-title {
+  @apply text-2xl font-bold text-gray-900 mb-2;
+}
+
+.page-subtitle {
+  @apply text-gray-600;
+}
+
+.action-button {
+  @apply inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-lg focus:outline-none focus:ring-2 focus:ring-offset-2 transition-colors duration-200;
+}
+
+.action-button-primary {
+  @apply bg-primary-600 text-white hover:bg-primary-700 focus:ring-primary-500;
+}
+
+.action-button-secondary {
+  @apply bg-white text-gray-700 border-gray-300 hover:bg-gray-50 focus:ring-primary-500;
+}
+
+.data-table {
+  @apply bg-white rounded-xl shadow-card overflow-hidden border border-gray-100;
+}
+
+.data-table-header {
+  @apply bg-gray-50 px-6 py-4 border-b border-gray-200;
+}
+
+.data-table-title {
+  @apply text-lg font-semibold text-gray-900;
+}
+
+.search-input {
+  @apply w-full max-w-md px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-transparent;
+}
+
+.filter-dropdown {
+  @apply relative inline-block text-left;
+}
+
+.status-indicator {
+  @apply inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium;
+}
+
+.status-success {
+  @apply bg-green-100 text-green-800;
+}
+
+.status-warning {
+  @apply bg-yellow-100 text-yellow-800;
+}
+
+.status-error {
+  @apply bg-red-100 text-red-800;
+}
+
+.status-pending {
+  @apply bg-blue-100 text-blue-800;
+}
+
+.modal-overlay {
+  @apply fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4 z-50;
+}
+
+.modal-content-modern {
+  @apply bg-white rounded-xl shadow-2xl max-w-lg w-full max-h-screen overflow-y-auto;
+}
+
+.modal-header-modern {
+  @apply px-6 py-4 border-b border-gray-200 bg-gray-50;
+}
+
+.modal-body-modern {
+  @apply px-6 py-4;
+}
+
+.modal-footer-modern {
+  @apply px-6 py-4 border-t border-gray-200 bg-gray-50 flex justify-end space-x-3;
+}
+
+.form-section {
+  @apply space-y-6;
+}
+
+.form-group {
+  @apply space-y-2;
+}
+
+.form-row {
+  @apply grid grid-cols-1 md:grid-cols-2 gap-4;
+}
+
+.form-actions {
+  @apply flex justify-end space-x-3 pt-6 border-t border-gray-200;
+}
+
+/* Responsive improvements */
+@media (max-width: 768px) {
+  .content-area {
+    @apply p-4;
+  }
+
+  .dashboard-card {
+    @apply p-4;
+  }
+
+  .page-title {
+    @apply text-xl;
+  }
+
+  .data-table {
+    @apply text-sm;
+  }
+}
+
+/* Animation utilities */
+.fade-in {
+  @apply transition-opacity duration-300 ease-in-out;
+}
+
+.slide-up {
+  @apply transition-transform duration-300 ease-in-out;
+}
+
+.hover-lift {
+  @apply transition-transform duration-200 hover:-translate-y-1;
+}
+
+/* Loading states */
+.loading-spinner {
+  @apply animate-spin rounded-full h-8 w-8 border-b-2 border-primary-600;
+}
+
+.loading-dots::after {
+  content: '';
+  @apply inline-block animate-pulse;
+}
+
+/* Print styles */
+@media print {
+  .no-print {
+    display: none !important;
+  }
+
+  .print-only {
+    display: block !important;
   }
 }
 .nav {
