@@ -1,3 +1,4 @@
+
 /* eslint-disable no-unused-vars */
 import "bootstrap/dist/css/bootstrap.min.css";
 import { useCallback, useEffect, useState } from "react";
@@ -9,8 +10,6 @@ import "./assets/styles/main.css";
 import AppNavigation from "./components/routes/AppNavigation";
 
 import { initUser } from "./redux/action/auth";
-
-// import Index from "./pages/pharmacy/drugRequest/Index";
 
 function App() {
   const location = useLocation();
@@ -39,17 +38,37 @@ function App() {
 
   if (pageIsReady)
     return (
-      <SkeletonTheme baseColor="red" highlightColor="#fff">
-        <Skeleton count={4} />
-      </SkeletonTheme>
+      <div className="min-h-screen bg-gradient-to-br from-gray-50 to-gray-100 flex items-center justify-center">
+        <div className="w-full max-w-md">
+          <SkeletonTheme baseColor="#f1f5f9" highlightColor="#ffffff">
+            <div className="space-y-4">
+              <Skeleton height={60} className="rounded-xl" />
+              <Skeleton height={40} className="rounded-lg" />
+              <Skeleton height={40} className="rounded-lg" />
+              <Skeleton height={80} className="rounded-xl" />
+            </div>
+          </SkeletonTheme>
+        </div>
+      </div>
     );
 
   return (
-    <>
-      <ToastProvider>
+    <div className="min-h-screen bg-gray-50">
+      <ToastProvider
+        autoDismiss
+        autoDismissTimeout={5000}
+        placement="top-right"
+        components={{
+          Toast: ({ children, ...props }) => (
+            <div className="bg-white rounded-lg shadow-lg border border-gray-200 p-4 max-w-sm">
+              {children}
+            </div>
+          )
+        }}
+      >
         <AppNavigation />
       </ToastProvider>
-    </>
+    </div>
   );
 }
 
