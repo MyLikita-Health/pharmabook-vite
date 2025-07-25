@@ -1,9 +1,10 @@
 
-const localEndpoint = "http://192.168.1.79:49555/api";
-// const remoteEndpoint = "https://yge.wvi.mybluehost.me/test/pharmabooks-api"; // Lukman
+const localEndpoint = "http://localhost:3000/api";
+const remoteEndpoint = "https://yge.wvi.mybluehost.me/test/pharmabooks-api"; // Lukman
 // const remoteEndpoint = 'http://192.168.43.156:49555/api'
 // const remoteEndpoint = 'https://yge.wvi.mybluehost.me/new_mylikita_server/api'
-export const apiURL =localEndpoint;
+export const apiURL = localEndpoint
+  process.env.NODE_ENV === "production" ? remoteEndpoint : localEndpoint;
 export const imageUrl = "http://localhost:49555/uploads/";
 
 export const getImageUrl = (value) => {

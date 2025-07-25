@@ -11,7 +11,7 @@ const Guest = () => {
 		light
   >
     <NavbarBrand href="/">
-      <img src={logo} className='logo' alt='Logo' />
+      {/* <img src={logo} className='logo' alt='Logo' /> */}
     </NavbarBrand>
     <NavbarToggler onClick={function noRefCheck(){}} />
     <Collapse navbar>
