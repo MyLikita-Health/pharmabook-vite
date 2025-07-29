@@ -52,7 +52,7 @@ const navigationItems = [
     items: [
       {
         label: "Point of Sale",
-        path: "/app/pharmacy/sales/pos",
+        path: "/app/pharmacy/drug-sales",
         icon: ShoppingCart,
       },
       {
@@ -60,17 +60,11 @@ const navigationItems = [
         path: "/app/pharmacy/sales/history",
         icon: FileText,
       },
-      {
-        label: "Returns",
-        path: "/app/pharmacy/sales/returns",
-        icon: BarChart3,
-      },
     ],
   },
   {
     label: "Customers",
-    
-    path: "/app/pharmacy/customers",
+    path: "/app/pharmacy/manage-customer",
     icon: Users,
   },
   {
@@ -80,10 +74,28 @@ const navigationItems = [
   },
   {
     label: "Settings",
-    path: "/app/pharmacy/settings",
     icon: Settings,
+    dropdown: true,
+    items: [
+      {
+        label: "Users",
+        path: "/app/pharmacy/settings/users",
+        icon: Users,
+      },
+      {
+        label: "Store Setup",
+        path: "/app/pharmacy/settings/store-setup",
+        icon: Package,
+      },
+      {
+        label: "App Settings",
+        path: "/app/pharmacy/settings/app-settings",
+        icon: Settings,
+      },
+    ],
   },
 ]
+
 
 // 🔁 Export just the route labels for privilege access
 export const routes = navigationItems.map((item) => item.label)

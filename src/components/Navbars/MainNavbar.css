@@ -5,7 +5,9 @@
 .nav-dropdown-modern .dropdown-item {
   list-style: none !important;
 }
-
+.user-dropdown{
+    list-style: none !important;
+}
 /* Ensure there's no margin/padding causing the dot appearance */
 .nav-dropdown-toggle {
   padding-left: 0;
@@ -24,6 +26,7 @@
 .navbar-wrapper {
   position: relative;
   z-index: 1000;
+  
 }
 
 /* ===== ALERT BANNER SECTION ===== */
@@ -38,7 +41,7 @@
 }
 
 .alert-banner-content {
-  height: 60px;
+  height: 30px;
   display: flex;
   align-items: center;
 }
@@ -97,7 +100,8 @@
   border: none !important;
   box-shadow: 0 4px 20px rgba(30, 64, 175, 0.3) !important;
   transition: all 0.3s ease;
-  padding: 0.75rem 0;
+  /* padding: 0.75rem 0; */
+  height: 60px;
   
 }
 
@@ -106,6 +110,7 @@
   align-items: center;
   justify-content: space-between;
   padding: 0 2rem;
+  height: 20px;
 }
 
 /* ===== BRAND SECTION ===== */

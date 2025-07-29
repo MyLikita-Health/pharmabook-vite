@@ -148,44 +148,42 @@ function AppNavigation() {
               ),
             },
             { path: "order/view/:order_id", element: <OrderView /> },
-            {
-              path: "store-setup",
-              element: (
-                <GeneralWrapper>
-                  <Users />
-                </GeneralWrapper>
-              ),
-            },
-            {
-              path: "create-agent",
-              element: (
-                <GeneralWrapper>
-                  <UserWrapper>
-                    <CreateUser />
-                  </UserWrapper>
-                </GeneralWrapper>
-              ),
-            },
-            {
-              path: "manage-store",
-              element: (
-                <GeneralWrapper>
-                  <UserWrapper>
-                    <ManageStore />
-                  </UserWrapper>
-                </GeneralWrapper>
-              ),
-            },
-            {
-              path: "settings",
-              element: (
-                <GeneralWrapper>
-                  <UserWrapper>
-                    <StoreSetup />
-                  </UserWrapper>
-                </GeneralWrapper>
-              ),
-            },
+          {
+  path: "settings",
+  children: [
+    {
+      path: "users",
+      element: (
+        <GeneralWrapper>
+          <UserWrapper>
+            <Users />
+          </UserWrapper>
+        </GeneralWrapper>
+      ),
+    },
+    {
+      path: "store-setup",
+      element: (
+        <GeneralWrapper>
+          <UserWrapper>
+            <ManageStore />
+          </UserWrapper>
+        </GeneralWrapper>
+      ),
+    },
+    {
+      path: "app-settings",
+      element: (
+        <GeneralWrapper>
+          <UserWrapper>
+            <StoreSetup />
+          </UserWrapper>
+        </GeneralWrapper>
+      ),
+    },
+  ],
+},
+
             { path: "product-category", element: <ProductCategory /> },
             { path: "transfer-form", element: <TransferForm /> },
             {

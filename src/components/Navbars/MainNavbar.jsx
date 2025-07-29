@@ -55,7 +55,7 @@ const MainNavbar = () => {
   return (
     <div className="navbar-wrapper ">
       <AlertNews />
-      <Navbar className="modern-navbar"  fixed="top" style={{ top: topFive.length > 0 ? "60px" : "0" }}>
+      <Navbar className="modern-navbar"  fixed="top" style={{ top: topFive.length > 0 ? "30px" : "0" }}>
         <Container fluid className="navbar-container">
           {/* Brand Section */}
           <NavbarBrand className="navbar-brand-enhanced" to="/app/pharmacy/dashboard" tag={Link}>
@@ -82,7 +82,7 @@ const MainNavbar = () => {
           {/* Right Side Actions */}
           <div className="navbar-actions">
             {/* Search Section */}
-            <div className="search-section">
+            {/* <div className="search-section">
               <div className={`search-container ${showSearch ? "expanded" : ""}`}>
                 <div className="search-input-wrapper">
                   <Search size={18} className="search-icon" />
@@ -105,10 +105,10 @@ const MainNavbar = () => {
                   </div>
                 )}
               </div>
-            </div>
+            </div> */}
 
             {/* Notifications */}
-            <UncontrolledDropdown nav inNavbar className="notification-dropdown">
+            <UncontrolledDropdown nav inNavbar className="notification-dropdown m-2">
               <DropdownToggle nav caret={false} className="nav-action-btn">
                 <div className="notification-btn">
                   <Bell size={20} />
@@ -171,10 +171,10 @@ const MainNavbar = () => {
             <UncontrolledDropdown nav inNavbar className="user-dropdown">
               <DropdownToggle nav caret={false} className="nav-action-btn">
                 <div className="user-btn">
-                  <div className="user-avatar">
+                  {/* <div className="user-avatar">
                     <img src="/placeholder.svg?height=36&width=36" alt="User Avatar" className="avatar-image" />
                     <div className="avatar-status online"></div>
-                  </div>
+                  </div> */}
                   <div className="user-info">
                     <span className="user-name">{user?.name || "John Doe"}</span>
                     <span className="user-role">{user?.role || "Pharmacist"}</span>
@@ -218,13 +218,13 @@ const MainNavbar = () => {
             </UncontrolledDropdown>
 
             {/* Mobile Menu Toggle */}
-            <NavbarToggler onClick={toggle} className="mobile-toggle">
+            <NavbarToggler onClick={toggle} className="mobile-toggle d-block d-md-none">
               {isOpen ? <X size={24} /> : <Menu size={24} />}
             </NavbarToggler>
           </div>
 
           {/* Mobile Navigation */}
-          <Collapse isOpen={isOpen} navbar className="mobile-nav">
+          <Collapse isOpen={isOpen} navbar className="mobile-nav d-block d-md-none">
             <div className="mobile-nav-content">
               <div className="mobile-nav-items">
                 <NavItems mobile />

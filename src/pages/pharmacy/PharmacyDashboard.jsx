@@ -1,9 +1,7 @@
 "use client"
 
 import moment from "moment"
-import { useCallback } from "react"
-import { useEffect } from "react"
-import { useState } from "react"
+import { useCallback, useEffect, useState } from "react"
 import { useDispatch, useSelector } from "react-redux"
 import { Row, Card, CardBody, CardHeader, Table, CardTitle, Col, Badge, Progress, Container } from "reactstrap"
 import { Checkbox, SearchBar } from "../../components/UI"
@@ -22,6 +20,7 @@ import {
   Calendar,
   Search,
   Filter,
+  Activity,
 } from "react-feather"
 import './dashboard.css'
 
@@ -90,9 +89,10 @@ function PharmacyDashboard() {
     setItems(
       searchTxt.length > 2 && list.length
         ? list.filter((item) => {
-            return item.description
-              ?.toLowerCase()
-              ?.includes(searchTxt.toLowerCase() || item.receive_date.toString().includes(searchTxt))
+            return (
+              item.description?.toLowerCase()?.includes(searchTxt.toLowerCase()) ||
+              item.receive_date.toString().includes(searchTxt)
+            )
           })
         : list,
     )
@@ -127,404 +127,376 @@ function PharmacyDashboard() {
   const profitMargin = salesTotal > 0 ? ((salesTotal - purchaseTotal) / salesTotal) * 100 : 0
 
   return (
-    <Container fluid className="py-4">
-      {/* Header Section */}
-      <Row className="mb-4">
-        <Col>
-          <Card className="border-0 shadow-sm">
-            <CardBody className="bg-gradient-primary text-white rounded">
-              <Row className="align-items-center">
-                <Col md={8}>
-                  <h2 className="mb-1 text-white">Welcome back, {activeBusiness?.pharmacy_name || "Pharmacy"}</h2>
-                  <p className="mb-0 text-white-50">
+    <Container fluid className="dashboard-container p-5">
+      {/* Welcome Header */}
+      <div className="dashboard-header">
+        <Card className="welcome-card">
+          <CardBody>
+            <Row className="align-items-center">
+              <Col md={8}>
+                <div className="welcome-content">
+                  <h1 className="welcome-title">Welcome back, {activeBusiness?.pharmacy_name || "Pharmacy"}</h1>
+                  <p className="welcome-subtitle">
                     <Calendar size={16} className="me-2" />
                     {moment().format("dddd, MMMM Do YYYY")}
                   </p>
-                </Col>
-                <Col md={4} className="text-end">
-                  <div className="d-flex align-items-center justify-content-end">
-                    <div className="me-3">
-                      <small className="text-white-50 d-block">Profit Margin</small>
-                      <h4 className="mb-0 text-white">{profitMargin.toFixed(1)}%</h4>
-                    </div>
+                </div>
+              </Col>
+              <Col md={4}>
+                <div className="profit-indicator">
+                  <div className="profit-content">
+                    <span className="profit-label">Profit Margin</span>
+                    <h2 className="profit-value">{profitMargin.toFixed(1)}%</h2>
+                  </div>
+                  <div className="profit-icon">
                     {profitMargin > 0 ? (
-                      <TrendingUp size={32} className="text-success" />
+                      <TrendingUp size={32} className="trend-up" />
                     ) : (
-                      <TrendingDown size={32} className="text-warning" />
+                      <TrendingDown size={32} className="trend-down" />
                     )}
                   </div>
-                </Col>
-              </Row>
+                </div>
+              </Col>
+            </Row>
+          </CardBody>
+        </Card>
+      </div>
+
+      {/* Date Range Filter */}
+      {user?.role === "Pharmacy Owner" && (
+        <div className="filter-section">
+          <Card className="filter-card">
+            <CardHeader>
+              <CardTitle className="filter-title">
+                <Filter size={18} />
+                Date Range Filter
+              </CardTitle>
+            </CardHeader>
+            <CardBody>
+              <DaterangeSelector handleChange={handleChange} from={dateInfo.from} to={dateInfo.to} />
             </CardBody>
           </Card>
-        </Col>
-      </Row>
-
-      {/* Date Range Selector */}
-      {user?.role === "Pharmacy Owner" && (
-        <Row className="mb-4">
-          <Col>
-            <Card className="border-0 shadow-sm">
-              <CardHeader className="bg-light border-0">
-                <CardTitle className="mb-0 d-flex align-items-center">
-                  <Filter size={18} className="me-2 text-primary" />
-                  Date Range Filter
-                </CardTitle>
-              </CardHeader>
-              <CardBody>
-                <DaterangeSelector handleChange={handleChange} from={dateInfo.from} to={dateInfo.to} />
-              </CardBody>
-            </Card>
-          </Col>
-        </Row>
+        </div>
       )}
 
       {/* Financial Summary Cards */}
-      <Row className="mb-4">
-        {user?.role === "Pharmacy Owner" && (
-          <Col lg={3} md={6} className="mb-3">
-            <Card className="border-0 shadow-sm h-100 hover-shadow">
-              <CardBody className="text-center">
-                <div className="d-flex justify-content-between align-items-start mb-3">
-                  <div className="bg-primary bg-opacity-10 p-3 rounded-circle">
-                    <ShoppingCart size={24} className="text-primary" />
+      <div className="metrics-section">
+        <Row>
+          {user?.role === "Pharmacy Owner" && (
+            <Col lg={3} md={6} className="mb-4">
+              <Card className="metric-card purchases-card">
+                <CardBody>
+                  <div className="metric-header">
+                    <div className="metric-icon purchases-icon">
+                      <ShoppingCart size={24} />
+                    </div>
+                    <Badge className="metric-badge purchases-badge">Purchases</Badge>
                   </div>
-                  <Badge color="primary" pill>
-                    Purchases
-                  </Badge>
+                  <div className="metric-content">
+                    <h3 className="metric-value">₦{formatNumber(purchaseTotal)}</h3>
+                    <p className="metric-label">Total Purchases</p>
+                  </div>
+                  <div className="metric-footer">
+                    <div className="metric-trend positive">
+                      <TrendingUp size={12} />
+                      <span>This period</span>
+                    </div>
+                  </div>
+                </CardBody>
+              </Card>
+            </Col>
+          )}
+
+          <Col lg={3} md={6} className="mb-4">
+            <Card className="metric-card sales-card">
+              <CardBody>
+                <div className="metric-header">
+                  <div className="metric-icon sales-icon">
+                    <DollarSign size={24} />
+                  </div>
+                  <Badge className="metric-badge sales-badge">Sales</Badge>
                 </div>
-                <h3 className="mb-1 text-primary">₦{formatNumber(purchaseTotal)}</h3>
-                <p className="text-muted mb-0">Total Purchases</p>
-                <div className="mt-2">
-                  <small className="text-success">
-                    <TrendingUp size={12} className="me-1" />
-                    This period
-                  </small>
+                <div className="metric-content">
+                  <h3 className="metric-value">₦{formatNumber(salesTotal)}</h3>
+                  <p className="metric-label">Total Sales</p>
+                </div>
+                <div className="metric-footer">
+                  <Progress value={75} className="metric-progress sales-progress" />
+                  <small className="progress-label">75% of target</small>
                 </div>
               </CardBody>
             </Card>
           </Col>
-        )}
 
-        <Col lg={3} md={6} className="mb-3">
-          <Card className="border-0 shadow-sm h-100 hover-shadow">
-            <CardBody className="text-center">
-              <div className="d-flex justify-content-between align-items-start mb-3">
-                <div className="bg-success bg-opacity-10 p-3 rounded-circle">
-                  <DollarSign size={24} className="text-success" />
-                </div>
-                <Badge color="success" pill>
-                  Sales
-                </Badge>
-              </div>
-              <h3 className="mb-1 text-success">₦{formatNumber(salesTotal)}</h3>
-              <p className="text-muted mb-0">Total Sales</p>
-              <div className="mt-2">
-                <Progress value={75} color="success" className="progress-sm" />
-                <small className="text-muted">75% of target</small>
-              </div>
-            </CardBody>
-          </Card>
-        </Col>
-
-        <Col lg={3} md={6} className="mb-3">
-          <Card className="border-0 shadow-sm h-100 hover-shadow">
-            <CardBody className="text-center">
-              <div className="d-flex justify-content-between align-items-start mb-3">
-                <div className="bg-warning bg-opacity-10 p-3 rounded-circle">
-                  <Package size={24} className="text-warning" />
-                </div>
-                <Badge color="warning" pill>
-                  Discounts
-                </Badge>
-              </div>
-              <h3 className="mb-1 text-warning">₦{formatNumber(discountTotal)}</h3>
-              <p className="text-muted mb-0">Total Discounts</p>
-              <div className="mt-2">
-                <small className="text-info">
-                  {salesTotal > 0 ? ((discountTotal / salesTotal) * 100).toFixed(1) : 0}% of sales
-                </small>
-              </div>
-            </CardBody>
-          </Card>
-        </Col>
-
-        {user?.role === "Pharmacy Owner" && (
-          <Col lg={3} md={6} className="mb-3">
-            <Card className="border-0 shadow-sm h-100 hover-shadow">
-              <CardBody className="text-center">
-                <div className="d-flex justify-content-between align-items-start mb-3">
-                  <div className="bg-danger bg-opacity-10 p-3 rounded-circle">
-                    <AlertTriangle size={24} className="text-danger" />
+          <Col lg={3} md={6} className="mb-4">
+            <Card className="metric-card discounts-card">
+              <CardBody>
+                <div className="metric-header">
+                  <div className="metric-icon discounts-icon">
+                    <Package size={24} />
                   </div>
-                  <Badge color="danger" pill>
-                    Debts
-                  </Badge>
+                  <Badge className="metric-badge discounts-badge">Discounts</Badge>
                 </div>
-                <h3 className="mb-1 text-danger">₦{formatNumber(debtsTotal)}</h3>
-                <p className="text-muted mb-0">Outstanding Debts</p>
-                <div className="mt-2">
-                  <small className="text-danger">Requires attention</small>
+                <div className="metric-content">
+                  <h3 className="metric-value">₦{formatNumber(discountTotal)}</h3>
+                  <p className="metric-label">Total Discounts</p>
+                </div>
+                <div className="metric-footer">
+                  <span className="discount-percentage">
+                    {salesTotal > 0 ? ((discountTotal / salesTotal) * 100).toFixed(1) : 0}% of sales
+                  </span>
                 </div>
               </CardBody>
             </Card>
           </Col>
-        )}
-      </Row>
 
-      {/* Main Content Area */}
-      <Row>
-        {user?.role === "Pharmacy Owner" ? (
-          <Col lg={8}>
-            {/* Purchase Items Table */}
-            <Card className="border-0 shadow-sm">
-              <CardHeader className="bg-light border-0">
-                <Row className="align-items-center">
-                  <Col md={6}>
-                    <CardTitle className="mb-0 d-flex align-items-center">
-                      <Package size={18} className="me-2 text-primary" />
-                      Recent Purchases
-                    </CardTitle>
-                  </Col>
-                  <Col md={6}>
-                    <div className="d-flex align-items-center justify-content-end">
-                      <div className="me-3">
+          {user?.role === "Pharmacy Owner" && (
+            <Col lg={3} md={6} className="mb-4">
+              <Card className="metric-card debts-card">
+                <CardBody>
+                  <div className="metric-header">
+                    <div className="metric-icon debts-icon">
+                      <AlertTriangle size={24} />
+                    </div>
+                    <Badge className="metric-badge debts-badge">Debts</Badge>
+                  </div>
+                  <div className="metric-content">
+                    <h3 className="metric-value">₦{formatNumber(debtsTotal)}</h3>
+                    <p className="metric-label">Outstanding Debts</p>
+                  </div>
+                  <div className="metric-footer">
+                    <span className="debt-warning">Requires attention</span>
+                  </div>
+                </CardBody>
+              </Card>
+            </Col>
+          )}
+        </Row>
+      </div>
+
+      {/* Main Content */}
+      <div className="main-content">
+        <Row>
+          {user?.role === "Pharmacy Owner" ? (
+            <Col lg={8}>
+              <Card className="purchases-table-card">
+                <CardHeader>
+                  <Row className="align-items-center">
+                    <Col md={6}>
+                      <CardTitle className="table-title">
+                        <Package size={18} />
+                        Recent Purchases
+                      </CardTitle>
+                    </Col>
+                    <Col md={6}>
+                      <div className="table-controls">
                         <Checkbox
                           label="Show All"
                           checked={showAllPurchase}
                           onChange={() => setShowAllPurchase((p) => !p)}
                         />
                       </div>
-                    </div>
-                  </Col>
-                </Row>
-              </CardHeader>
-              <CardBody className="p-0">
-                {/* Search Bar */}
-                <div className="p-3 border-bottom bg-light">
-                  <div className="position-relative">
-                    <Search size={16} className="position-absolute top-50 start-0 translate-middle-y ms-3 text-muted" />
-                    <SearchBar
-                      onFilterTextChange={(v) => addSearchTxt(v)}
-                      filterText={searchTxt}
-                      placeholder="Search for purchases..."
-                      className="ps-5"
-                    />
-                  </div>
-                </div>
-
-                {/* Summary Stats */}
-                <div className="p-3 bg-light border-bottom">
-                  <Row className="text-center">
-                    <Col md={4}>
-                      <div>
-                        <h6 className="mb-1 text-primary">{final.length}</h6>
-                        <small className="text-muted">Total Items</small>
-                      </div>
-                    </Col>
-                    <Col md={4}>
-                      <div>
-                        <h6 className="mb-1 text-success">₦{formatNumber(totalAmount)}</h6>
-                        <small className="text-muted">Total Cost</small>
-                      </div>
-                    </Col>
-                    <Col md={4}>
-                      <div>
-                        <h6 className="mb-1 text-info">₦{formatNumber(total_selling_price)}</h6>
-                        <small className="text-muted">Selling Price</small>
-                      </div>
                     </Col>
                   </Row>
-                </div>
+                </CardHeader>
 
-                {/* Table */}
-                <CustomScrollbar height="400px">
-                  {final.length > 0 ? (
-                    <Table responsive hover className="mb-0">
-                      <thead className="bg-light sticky-top">
-                        <tr>
-                          <th className="border-0 text-center">#</th>
-                          <th className="border-0">Date</th>
-                          <th className="border-0">Drug Name</th>
-                          <th className="border-0 text-center">Quantity</th>
-                          <th className="border-0 text-end">Cost Price (₦)</th>
-                          <th className="border-0 text-end">Amount (₦)</th>
-                        </tr>
-                      </thead>
-                      <tbody>
-                        {final.map((item, i) => (
-                          <tr key={i} className="border-bottom">
-                            <td className="text-center">
-                              <Badge color="light" pill>
-                                {i + 1}
-                              </Badge>
-                            </td>
-                            <td>
-                              <small className="text-muted">{moment(item.receive_date).format("MMM DD, YYYY")}</small>
-                            </td>
-                            <td>
-                              <div>
-                                <div className="fw-medium">{item.description}</div>
-                                {item.generic_name && <small className="text-muted">{item.generic_name}</small>}
-                              </div>
-                            </td>
-                            <td className="text-center">
-                              <Badge color="primary" pill>
-                                {formatNumber(item.qty)}
-                              </Badge>
-                            </td>
-                            <td className="text-end fw-medium">₦{formatNumber(item.unit_price)}</td>
-                            <td className="text-end fw-bold text-success">₦{formatNumber(item.amount)}</td>
+                <CardBody className="p-0">
+                  {/* Search Section */}
+                  <div className="search-section">
+                    <div className="search-wrapper">
+                      <Search size={16} className="search-icon" />
+                      <SearchBar
+                        onFilterTextChange={(v) => addSearchTxt(v)}
+                        filterText={searchTxt}
+                        placeholder="Search for purchases..."
+                        className="search-input"
+                      />
+                    </div>
+                  </div>
+
+                  {/* Summary Stats */}
+                  <div className="table-summary">
+                    <Row>
+                      <Col md={4}>
+                        <div className="summary-item">
+                          <h6 className="summary-value">{final.length}</h6>
+                          <span className="summary-label">Total Items</span>
+                        </div>
+                      </Col>
+                      <Col md={4}>
+                        <div className="summary-item">
+                          <h6 className="summary-value">₦{formatNumber(totalAmount)}</h6>
+                          <span className="summary-label">Total Cost</span>
+                        </div>
+                      </Col>
+                      <Col md={4}>
+                        <div className="summary-item">
+                          <h6 className="summary-value">₦{formatNumber(total_selling_price)}</h6>
+                          <span className="summary-label">Selling Price</span>
+                        </div>
+                      </Col>
+                    </Row>
+                  </div>
+
+                  {/* Table */}
+                  <CustomScrollbar height="400px">
+                    {final.length > 0 ? (
+                      <Table responsive className="purchases-table">
+                        <thead>
+                          <tr>
+                            <th>#</th>
+                            <th>Date</th>
+                            <th>Drug Name</th>
+                            <th>Quantity</th>
+                            <th>Cost Price</th>
+                            <th>Amount</th>
                           </tr>
-                        ))}
-                      </tbody>
-                    </Table>
-                  ) : (
-                    <div className="text-center py-5">
-                      <Package size={48} className="text-muted mb-3" />
-                      <h5 className="text-muted">No purchases found</h5>
-                      <p className="text-muted">Try adjusting your search or date range</p>
+                        </thead>
+                        <tbody>
+                          {final.map((item, i) => (
+                            <tr key={i}>
+                              <td>
+                                <Badge className="row-number">{i + 1}</Badge>
+                              </td>
+                              <td>
+                                <span className="date-text">{moment(item.receive_date).format("MMM DD, YYYY")}</span>
+                              </td>
+                              <td>
+                                <div className="drug-info">
+                                  <div className="drug-name">{item.description}</div>
+                                  {item.generic_name && <div className="generic-name">{item.generic_name}</div>}
+                                </div>
+                              </td>
+                              <td>
+                                <Badge className="quantity-badge">{formatNumber(item.qty)}</Badge>
+                              </td>
+                              <td className="price-cell">₦{formatNumber(item.unit_price)}</td>
+                              <td className="amount-cell">₦{formatNumber(item.amount)}</td>
+                            </tr>
+                          ))}
+                        </tbody>
+                      </Table>
+                    ) : (
+                      <div className="empty-state">
+                        <Package size={48} />
+                        <h5>No purchases found</h5>
+                        <p>Try adjusting your search or date range</p>
+                      </div>
+                    )}
+                  </CustomScrollbar>
+                </CardBody>
+              </Card>
+            </Col>
+          ) : (
+            <Col lg={12}>
+              <Card className="sales-dashboard-card">
+                <CardHeader>
+                  <CardTitle className="sales-title">
+                    <DollarSign size={18} />
+                    Sales Dashboard
+                  </CardTitle>
+                </CardHeader>
+                <CardBody>
+                  <DashboardSales />
+                </CardBody>
+              </Card>
+            </Col>
+          )}
+
+          {user?.role === "Pharmacy Owner" && (
+            <Col lg={4}>
+              {/* Quick Stats */}
+              <Card className="quick-stats-card">
+                <CardHeader>
+                  <CardTitle className="stats-title">Quick Overview</CardTitle>
+                </CardHeader>
+                <CardBody>
+                  <div className="stat-item">
+                    <div className="stat-header">
+                      <span className="stat-label">Revenue Growth</span>
+                      <span className="stat-value positive">+12.5%</span>
                     </div>
-                  )}
-                </CustomScrollbar>
-              </CardBody>
-            </Card>
-          </Col>
-        ) : (
-          <Col lg={12}>
-            <Card className="border-0 shadow-sm">
-              <CardHeader className="bg-light border-0">
-                <CardTitle className="mb-0 d-flex align-items-center">
-                  <DollarSign size={18} className="me-2 text-success" />
-                  Sales Dashboard
-                </CardTitle>
-              </CardHeader>
-              <CardBody>
-                <DashboardSales />
-              </CardBody>
-            </Card>
-          </Col>
-        )}
-
-        {user?.role === "Pharmacy Owner" && (
-          <Col lg={4}>
-            {/* Quick Stats */}
-            <Card className="border-0 shadow-sm mb-4">
-              <CardHeader className="bg-light border-0">
-                <CardTitle className="mb-0">Quick Overview</CardTitle>
-              </CardHeader>
-              <CardBody>
-                <div className="mb-3">
-                  <div className="d-flex justify-content-between align-items-center mb-2">
-                    <span className="text-muted">Revenue Growth</span>
-                    <span className="text-success fw-bold">+12.5%</span>
+                    <Progress value={75} className="stat-progress revenue-progress" />
                   </div>
-                  <Progress value={75} color="success" className="progress-sm" />
-                </div>
 
-                <div className="mb-3">
-                  <div className="d-flex justify-content-between align-items-center mb-2">
-                    <span className="text-muted">Inventory Turnover</span>
-                    <span className="text-info fw-bold">8.2x</span>
+                  <div className="stat-item">
+                    <div className="stat-header">
+                      <span className="stat-label">Inventory Turnover</span>
+                      <span className="stat-value info">8.2x</span>
+                    </div>
+                    <Progress value={82} className="stat-progress inventory-progress" />
                   </div>
-                  <Progress value={82} color="info" className="progress-sm" />
-                </div>
 
-                <div className="mb-3">
-                  <div className="d-flex justify-content-between align-items-center mb-2">
-                    <span className="text-muted">Customer Satisfaction</span>
-                    <span className="text-warning fw-bold">4.8/5</span>
+                  <div className="stat-item">
+                    <div className="stat-header">
+                      <span className="stat-label">Customer Satisfaction</span>
+                      <span className="stat-value warning">4.8/5</span>
+                    </div>
+                    <Progress value={96} className="stat-progress satisfaction-progress" />
                   </div>
-                  <Progress value={96} color="warning" className="progress-sm" />
-                </div>
-              </CardBody>
-            </Card>
+                </CardBody>
+              </Card>
 
-            {/* Recent Activity */}
-            <Card className="border-0 shadow-sm">
-              <CardHeader className="bg-light border-0">
-                <CardTitle className="mb-0">Recent Activity</CardTitle>
-              </CardHeader>
-              <CardBody>
-                <div className="timeline">
-                  <div className="timeline-item mb-3">
-                    <div className="timeline-marker bg-success"></div>
-                    <div className="timeline-content">
-                      <h6 className="mb-1">New Sale Completed</h6>
-                      <p className="text-muted mb-0 small">₦15,000 - Paracetamol & Vitamins</p>
-                      <small className="text-muted">2 minutes ago</small>
+              {/* Recent Activity */}
+              <Card className="activity-card">
+                <CardHeader>
+                  <CardTitle className="activity-title">
+                    <Activity size={18} />
+                    Recent Activity
+                  </CardTitle>
+                </CardHeader>
+                <CardBody>
+                  <div className="activity-timeline">
+                    <div className="activity-item">
+                      <div className="activity-marker success"></div>
+                      <div className="activity-content">
+                        <div className="activity-header">
+                          <h6>New Sale Completed</h6>
+                          <span className="activity-time">2 min ago</span>
+                        </div>
+                        <p>₦15,000 - Paracetamol & Vitamins</p>
+                      </div>
+                    </div>
+
+                    <div className="activity-item">
+                      <div className="activity-marker primary"></div>
+                      <div className="activity-content">
+                        <div className="activity-header">
+                          <h6>Inventory Updated</h6>
+                          <span className="activity-time">1 hour ago</span>
+                        </div>
+                        <p>50 items restocked</p>
+                      </div>
+                    </div>
+
+                    <div className="activity-item">
+                      <div className="activity-marker warning"></div>
+                      <div className="activity-content">
+                        <div className="activity-header">
+                          <h6>Low Stock Alert</h6>
+                          <span className="activity-time">3 hours ago</span>
+                        </div>
+                        <p>Aspirin running low</p>
+                      </div>
+                    </div>
+
+                    <div className="activity-item">
+                      <div className="activity-marker info"></div>
+                      <div className="activity-content">
+                        <div className="activity-header">
+                          <h6>Report Generated</h6>
+                          <span className="activity-time">5 hours ago</span>
+                        </div>
+                        <p>Monthly sales report ready</p>
+                      </div>
                     </div>
                   </div>
-
-                  <div className="timeline-item mb-3">
-                    <div className="timeline-marker bg-primary"></div>
-                    <div className="timeline-content">
-                      <h6 className="mb-1">Inventory Updated</h6>
-                      <p className="text-muted mb-0 small">50 items restocked</p>
-                      <small className="text-muted">1 hour ago</small>
-                    </div>
-                  </div>
-
-                  <div className="timeline-item mb-3">
-                    <div className="timeline-marker bg-warning"></div>
-                    <div className="timeline-content">
-                      <h6 className="mb-1">Low Stock Alert</h6>
-                      <p className="text-muted mb-0 small">Aspirin running low</p>
-                      <small className="text-muted">3 hours ago</small>
-                    </div>
-                  </div>
-                </div>
-              </CardBody>
-            </Card>
-          </Col>
-        )}
-      </Row>
-
-      {/* Custom Styles */}
-      <style jsx>{`
-        .hover-shadow {
-          transition: all 0.3s ease;
-        }
-        .hover-shadow:hover {
-          transform: translateY(-2px);
-          box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.15) !important;
-        }
-        .progress-sm {
-          height: 4px;
-        }
-        .timeline {
-          position: relative;
-        }
-        .timeline-item {
-          position: relative;
-          padding-left: 2rem;
-        }
-        .timeline-marker {
-          position: absolute;
-          left: 0;
-          top: 0.25rem;
-          width: 0.75rem;
-          height: 0.75rem;
-          border-radius: 50%;
-        }
-        .timeline-item:not(:last-child)::before {
-          content: '';
-          position: absolute;
-          left: 0.375rem;
-          top: 1rem;
-          width: 1px;
-          height: calc(100% - 0.5rem);
-          background-color: #dee2e6;
-        }
-        .bg-gradient-primary {
-          background: linear-gradient(135deg, #007bff 0%, #0056b3 100%);
-        }
-        .sticky-top {
-          position: sticky;
-          top: 0;
-          z-index: 10;
-        }
-      `}</style>
+                </CardBody>
+              </Card>
+            </Col>
+          )}
+        </Row>
+      </div>
     </Container>
   )
 }

@@ -1,0 +1,551 @@
+/* ===== DRUG SALES CONTAINER ===== */
+.drug-sales-container {
+  padding: 2rem 0;
+  background: linear-gradient(135deg, #f8fafc 0%, #e2e8f0 100%);
+  min-height: 100vh;
+  
+}
+
+/* ===== MODERN HEADER SECTION ===== */
+.sales-header-modern {
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  border-radius: 20px;
+  padding: 2rem;
+  margin-bottom: 2rem;
+  color: white;
+  position: relative;
+  overflow: hidden;
+  box-shadow: 0 10px 40px rgba(102, 126, 234, 0.3);
+}
+
+.sales-header-modern::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  right: 0;
+  width: 300px;
+  height: 300px;
+  background: radial-gradient(circle, rgba(255, 255, 255, 0.1) 0%, transparent 70%);
+  border-radius: 50%;
+  transform: translate(50%, -50%);
+}
+
+.header-content {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  margin-bottom: 1.5rem;
+  position: relative;
+  z-index: 2;
+}
+
+.header-main {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+
+.header-icon {
+  width: 60px;
+  height: 60px;
+  background: rgba(255, 255, 255, 0.15);
+  backdrop-filter: blur(10px);
+  border-radius: 16px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: 1px solid rgba(255, 255, 255, 0.2);
+}
+
+.header-text {
+  flex: 1;
+}
+
+.header-title {
+  font-size: 2rem;
+  font-weight: 700;
+  margin-bottom: 0.5rem;
+  background: linear-gradient(135deg, #ffffff, #e0e7ff);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+.header-subtitle {
+  font-size: 1rem;
+  color: rgba(255, 255, 255, 0.8);
+  margin: 0;
+}
+
+.header-stats {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+  gap: 1rem;
+  position: relative;
+  z-index: 2;
+}
+
+.stat-card {
+  background: rgba(255, 255, 255, 0.1);
+  backdrop-filter: blur(10px);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  border-radius: 12px;
+  padding: 1rem;
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  transition: all 0.3s ease;
+}
+
+.stat-card:hover {
+  background: rgba(255, 255, 255, 0.15);
+  transform: translateY(-2px);
+}
+
+.stat-icon {
+  width: 40px;
+  height: 40px;
+  border-radius: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: white;
+}
+
+.stat-icon.products {
+  background: linear-gradient(135deg, #10b981, #059669);
+}
+
+.stat-icon.cart {
+  background: linear-gradient(135deg, #3b82f6, #1d4ed8);
+}
+
+.stat-icon.total {
+  background: linear-gradient(135deg, #f59e0b, #d97706);
+}
+
+.stat-icon.quantity {
+  background: linear-gradient(135deg, #8b5cf6, #7c3aed);
+}
+
+.stat-content {
+  display: flex;
+  flex-direction: column;
+}
+
+.stat-value {
+  font-size: 1.25rem;
+  font-weight: 700;
+  line-height: 1.2;
+}
+
+.stat-label {
+  font-size: 0.75rem;
+  color: rgba(255, 255, 255, 0.8);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+/* ===== QUICK ACTIONS ===== */
+.quick-actions {
+  display: flex;
+  align-items: center;
+  gap: 1.5rem;
+  flex-wrap: wrap;
+  position: relative;
+  z-index: 2;
+}
+
+.action-item {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  background: rgba(255, 255, 255, 0.1);
+  backdrop-filter: blur(10px);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  border-radius: 20px;
+  padding: 0.5rem 1rem;
+  font-size: 0.875rem;
+  font-weight: 500;
+  transition: all 0.3s ease;
+}
+
+.action-item:hover {
+  background: rgba(255, 255, 255, 0.15);
+}
+
+.action-item.warning {
+  background: rgba(245, 158, 11, 0.2);
+  border-color: rgba(245, 158, 11, 0.3);
+  color: #fbbf24;
+}
+
+.action-item.success {
+  background: rgba(16, 185, 129, 0.2);
+  border-color: rgba(16, 185, 129, 0.3);
+  color: #34d399;
+}
+
+/* ===== MAIN CONTENT ===== */
+.sales-content-modern {
+  /* gap: 2rem; */
+}
+
+/* ===== PRODUCTS SECTION ===== */
+.products-section-modern {
+  display: flex;
+  flex-direction: column;
+}
+
+.products-card {
+  background: white;
+  border-radius: 16px;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+  overflow: hidden;
+  height: calc(100vh - 300px);
+  display: flex;
+  flex-direction: column;
+}
+
+.products-card .card-header {
+  background: linear-gradient(135deg, #f8fafc, #e2e8f0);
+  padding: 1.5rem;
+  border-bottom: 1px solid #e5e7eb;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.header-left {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+.header-left h3 {
+  margin: 0;
+  font-size: 1.25rem;
+  font-weight: 600;
+  color: #111827;
+}
+
+.header-right {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+
+.search-indicator {
+  display: flex;
+  align-items: center;
+}
+
+.search-badge {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  background: rgba(59, 130, 246, 0.1);
+  color: #1d4ed8;
+  padding: 0.5rem 1rem;
+  border-radius: 20px;
+  font-size: 0.875rem;
+  font-weight: 500;
+  border: 1px solid rgba(59, 130, 246, 0.2);
+}
+
+/* ===== CART SECTION ===== */
+.cart-section-modern {
+  display: flex;
+  flex-direction: column;
+}
+
+.cart-card {
+  background: white;
+  border-radius: 16px;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+  overflow: hidden;
+  height: calc(100vh - 300px);
+  display: flex;
+  flex-direction: column;
+}
+
+.cart-card .card-header {
+  background: linear-gradient(135deg, #f8fafc, #e2e8f0);
+  padding: 1.5rem;
+  border-bottom: 1px solid #e5e7eb;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.cart-count {
+  background: #3b82f6;
+  color: white;
+  padding: 0.25rem 0.75rem;
+  border-radius: 12px;
+  font-size: 0.875rem;
+  font-weight: 600;
+}
+
+/* ===== LOADING OVERLAY ===== */
+.loading-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.7);
+  backdrop-filter: blur(4px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 9999;
+}
+
+.loading-content {
+  background: white;
+  border-radius: 20px;
+  padding: 3rem;
+  text-align: center;
+  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3);
+  max-width: 400px;
+  width: 90%;
+}
+
+.loading-spinner {
+  width: 60px;
+  height: 60px;
+  border: 4px solid #f3f4f6;
+  border-top: 4px solid #3b82f6;
+  border-radius: 50%;
+  animation: spin 1s linear infinite;
+  margin: 0 auto 1.5rem;
+}
+
+.loading-content h4 {
+  color: #111827;
+  margin-bottom: 0.5rem;
+  font-weight: 600;
+}
+
+.loading-content p {
+  color: #6b7280;
+  margin: 0;
+}
+
+@keyframes spin {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
+}
+
+/* ===== RESPONSIVE DESIGN ===== */
+@media (max-width: 1200px) {
+  .header-stats {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  .stat-card {
+    padding: 0.75rem;
+  }
+
+  .stat-value {
+    font-size: 1.125rem;
+  }
+}
+
+@media (max-width: 992px) {
+  .drug-sales-container {
+    padding: 1rem 0;
+  }
+
+  .sales-header-modern {
+    padding: 1.5rem;
+    margin-bottom: 1.5rem;
+  }
+
+  .header-content {
+    flex-direction: column;
+    /* gap: 1.5rem; */
+  }
+
+  .header-stats {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  .products-card,
+  .cart-card {
+    height: auto;
+    min-height: 500px;
+  }
+
+  .sales-content-modern {
+    gap: 1.5rem;
+  }
+}
+
+@media (max-width: 768px) {
+  .header-title {
+    font-size: 1.5rem;
+  }
+
+  .header-main {
+    flex-direction: column;
+    text-align: center;
+    gap: 1rem;
+  }
+
+  .header-stats {
+    grid-template-columns: 1fr;
+  }
+
+  .quick-actions {
+    justify-content: center;
+    gap: 1rem;
+  }
+
+  .action-item {
+    font-size: 0.8rem;
+    padding: 0.4rem 0.8rem;
+  }
+
+  .products-card .card-header,
+  .cart-card .card-header {
+    padding: 1rem;
+  }
+
+  .header-left h3 {
+    font-size: 1.125rem;
+  }
+}
+
+@media (max-width: 576px) {
+  .drug-sales-container {
+    padding: 0.5rem 0;
+  }
+
+  .sales-header-modern {
+    padding: 0.5rem;
+    border-radius: 12px;
+  }
+
+  .header-icon {
+    width: 50px;
+    height: 50px;
+  }
+
+  .stat-card {
+    padding: 0.75rem;
+    gap: 0.5rem;
+  }
+
+  .stat-icon {
+    width: 35px;
+    height: 35px;
+  }
+
+  .stat-value {
+    font-size: 1rem;
+  }
+
+  .loading-content {
+    padding: 2rem;
+  }
+
+  .loading-spinner {
+    width: 50px;
+    height: 50px;
+  }
+}
+
+/* ===== ANIMATIONS ===== */
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.products-card,
+.cart-card {
+  animation: fadeInUp 0.6s ease-out;
+}
+
+.products-card {
+  animation-delay: 0.1s;
+}
+
+.cart-card {
+  animation-delay: 0.2s;
+}
+
+.stat-card {
+  animation: fadeInUp 0.4s ease-out;
+  animation-fill-mode: both;
+}
+
+.stat-card:nth-child(1) {
+  animation-delay: 0.1s;
+}
+
+.stat-card:nth-child(2) {
+  animation-delay: 0.2s;
+}
+
+.stat-card:nth-child(3) {
+  animation-delay: 0.3s;
+}
+
+.stat-card:nth-child(4) {
+  animation-delay: 0.4s;
+}
+
+/* ===== ACCESSIBILITY ===== */
+.products-card:focus-within,
+.cart-card:focus-within {
+  outline: 2px solid #3b82f6;
+  outline-offset: 2px;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .stat-card,
+  .products-card,
+  .cart-card,
+  .loading-spinner {
+    animation: none;
+    transition: none;
+  }
+
+  .stat-card:hover {
+    transform: none;
+  }
+}
+
+/* ===== PRINT STYLES ===== */
+@media print {
+  .drug-sales-container {
+    background: white;
+  }
+
+  .sales-header-modern,
+  .products-card,
+  .cart-card {
+    box-shadow: none;
+    border: 1px solid #000;
+  }
+
+  .loading-overlay {
+    display: none;
+  }
+
+  .quick-actions {
+    display: none;
+  }
+}
